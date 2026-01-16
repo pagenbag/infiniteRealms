@@ -445,7 +445,7 @@ const App: React.FC = () => {
 
   if (view === 'lobby') {
     return (
-      <div className="min-h-screen bg-parchment-200 flex flex-col items-center justify-center p-8 font-title relative overflow-hidden">
+      <div className="h-screen overflow-y-auto bg-parchment-200 flex flex-col items-center justify-center p-8 font-title relative">
         <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
             backgroundImage: "radial-gradient(circle at center, #5c4b36 1px, transparent 1px)",
             backgroundSize: "40px 40px"
@@ -486,7 +486,7 @@ const App: React.FC = () => {
   if (view === 'campaign-select') {
       if (isCustomCampaign) {
           return (
-             <div className="min-h-screen bg-parchment-200 p-8 flex flex-col items-center justify-center font-body">
+             <div className="h-screen overflow-y-auto bg-parchment-200 p-8 flex flex-col items-center justify-center font-body">
                  <div className="bg-parchment-100 p-8 rounded shadow-lg border-2 border-parchment-800 max-w-2xl w-full paper-shadow">
                      <h2 className="font-title text-3xl mb-6 text-parchment-900">Custom Homebrew Campaign</h2>
                      
@@ -532,7 +532,7 @@ const App: React.FC = () => {
       }
 
       return (
-          <div className="min-h-screen bg-parchment-200 p-8 flex flex-col items-center">
+          <div className="h-screen overflow-y-auto bg-parchment-200 p-8 flex flex-col items-center">
               <h2 className="font-title text-4xl mb-8 text-parchment-900">Choose Your Adventure</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl w-full">
                   {campaignOptions.map((opt, i) => (
@@ -561,7 +561,7 @@ const App: React.FC = () => {
 
   if (view === 'char-creation') {
     return (
-      <div className="min-h-screen bg-parchment-200 p-6 font-body">
+      <div className="h-screen overflow-y-auto bg-parchment-200 p-6 font-body">
         <div className="max-w-6xl mx-auto bg-parchment-100 min-h-[80vh] rounded shadow-xl border-2 border-parchment-800 p-8 relative paper-shadow">
           <h2 className="font-title text-3xl mb-2 text-center text-parchment-900">Gather Your Party</h2>
           <p className="text-center text-parchment-800 mb-8 italic">Create characters or ask the fates to provide them.</p>
