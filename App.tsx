@@ -3,6 +3,7 @@ import { Theme, Character, Campaign, GameLogEntry, PlayerAction, DMResponse } fr
 import * as gemini from './services/geminiService';
 import CharacterCard from './components/CharacterCard';
 import Dice from './components/Dice';
+import LoginScreen from './components/LoginScreen';
 
 // Simple ID gen
 const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -37,7 +38,10 @@ const TOTAL_POINTS = 27;
 
 const App: React.FC = () => {
   // --- State ---
-  const [view, setView] = useState<'lobby' | 'campaign-select' | 'char-creation' | 'game'>('lobby');
+  // Added 'login' to the view union type
+  const [view, setView] = useState<'login' | 'lobby' | 'campaign-select' | 'char-creation' | 'game'>('login');
+  const [user, setUser] = useState<{name: string, email: string} | null>(null);
+
   const [theme, setTheme] = useState<Theme>(Theme.FANTASY);
   const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -96,6 +100,8 @@ const App: React.FC = () => {
     if (saved) {
       try {
         JSON.parse(saved);
+        // Note: We don't restore state automatically here anymore to force login flow 
+        // unless we persisted session, but for this demo we start at login.
       } catch(e) { console.error(e) }
     }
   }, []);
@@ -131,6 +137,23 @@ const App: React.FC = () => {
   }
 
   // --- Handlers ---
+
+  const handleLogin = () => {
+      // Simulate API call
+      setTimeout(() => {
+          setUser({
+              name: "Traveler",
+              email: "adventure@example.com"
+          });
+          setView('lobby');
+      }, 1500);
+  };
+
+  const handleLogout = () => {
+      setUser(null);
+      setView('login');
+      // Optional: clear current game state if desired, but keeping it allows quick resume
+  };
 
   const handleThemeSelect = async (selectedTheme: Theme) => {
     setTheme(selectedTheme);
@@ -443,6 +466,10 @@ const App: React.FC = () => {
 
   // --- Views ---
 
+  if (view === 'login') {
+      return <LoginScreen onLogin={handleLogin} />;
+  }
+
   if (view === 'lobby') {
     return (
       <div className="h-screen overflow-y-auto bg-parchment-200 flex flex-col items-center justify-center p-8 font-title relative">
@@ -450,6 +477,22 @@ const App: React.FC = () => {
             backgroundImage: "radial-gradient(circle at center, #5c4b36 1px, transparent 1px)",
             backgroundSize: "40px 40px"
         }}></div>
+
+        {/* User Badge */}
+        {user && (
+            <div className="absolute top-4 right-4 z-20 flex items-center gap-2 bg-parchment-100/90 p-2 rounded-full border border-parchment-800 shadow-lg animate-in fade-in slide-in-from-top-4">
+                <div className="w-8 h-8 rounded-full bg-slate-800 text-parchment-100 flex items-center justify-center font-bold">
+                    {user.name.charAt(0)}
+                </div>
+                <div className="hidden md:flex flex-col leading-none mr-2">
+                    <span className="text-xs font-bold text-parchment-900">{user.name}</span>
+                    <button onClick={handleLogout} className="text-[10px] text-red-700 hover:text-red-900 text-left font-bold">Sign Out</button>
+                </div>
+                <button onClick={handleLogout} className="md:hidden text-red-700 hover:text-red-900 px-2 font-bold text-xs">
+                    ✕
+                </button>
+            </div>
+        )}
 
         <div className="z-10 bg-parchment-100 p-12 rounded-lg shadow-2xl border-4 border-parchment-800 text-center max-w-2xl w-full paper-shadow">
           <h1 className="text-6xl font-bold mb-4 text-parchment-900 tracking-tighter">Infinite Realms Tabletop</h1>
