@@ -9,6 +9,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Patrick+Hand&display=swap" rel="stylesheet">
     <script>
+      // Polyfill for process.env to prevent runtime crashes in browser environments
+      // if the bundler doesn't inject it automatically.
+      if (typeof process === 'undefined') {
+        window.process = { env: { API_KEY: '' } };
+      }
+    </script>
+    <script>
       tailwind.config = {
         theme: {
           extend: {
@@ -61,5 +68,6 @@
 </head>
   <body class="text-slate-900 h-screen overflow-hidden">
     <div id="root" class="h-full w-full"></div>
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>
